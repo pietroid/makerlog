@@ -8,9 +8,9 @@ Start order:
 
 from pathlib import Path
 
-from src.project.services.config_service import ensure_global_dir, read_config
-from src.project.domain.project_discovery import find_nearest_makerbook
-from src.project.presentation.file_manager import editor_loop, file_manager
+from src.python.project.services.config_service import ensure_global_dir, read_config
+from src.python.project.domain.project_discovery import find_nearest_makerbook
+from src.python.project.presentation.file_manager import editor_loop, file_manager
 
 
 def main() -> None:
