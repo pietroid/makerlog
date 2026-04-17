@@ -1,0 +1,12 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+
+linter:
+  rules:
+    # We import `Text`, `Row`, `Column` by design — clitter is
+    # Flutter-like. Relax a few Dart-lints that would otherwise nag.
+    avoid_print: false

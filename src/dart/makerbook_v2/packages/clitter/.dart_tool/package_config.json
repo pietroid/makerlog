@@ -1,0 +1,16 @@
+{
+  "configVersion": 2,
+  "packages": [
+    {
+      "name": "clitter",
+      "rootUri": "../",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    }
+  ],
+  "generator": "pub",
+  "generatorVersion": "3.11.0",
+  "flutterRoot": "file:///Users/pietroteruya/fvm/versions/3.41.2",
+  "flutterVersion": "3.41.2",
+  "pubCache": "file:///Users/pietroteruya/.pub-cache"
+}

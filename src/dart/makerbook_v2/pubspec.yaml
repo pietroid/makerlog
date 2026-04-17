@@ -1,0 +1,22 @@
+name: makerbook_v2
+description: Makerbook CLI — a small terminal app built on the Clitter framework.
+version: 0.2.0
+publish_to: none
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  # The framework lives in-tree as a path package so edits there
+  # hot-reload alongside the app.
+  clitter:
+    path: packages/clitter
+
+  # Optional: enables true Flutter-style hot reload. If you don't want
+  # the dependency, delete this line and the HotReloader.create() call
+  # in lib/main.dart — the app still runs, you just restart to see
+  # code changes.
+  hotreloader: ^4.2.0
+
+dev_dependencies:
+  lints: ^3.0.0

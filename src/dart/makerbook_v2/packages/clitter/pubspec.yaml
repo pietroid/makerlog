@@ -1,0 +1,11 @@
+name: clitter
+description: A Flutter-like framework for building terminal (CLI) apps in Dart.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.0.0
+
+# Clitter is intentionally dependency-free — it only needs dart:io and
+# dart:async from the SDK. Hot reload is wired up by the host app
+# (see makerbook_v2/lib/main.dart) so clitter stays small.

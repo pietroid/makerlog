@@ -401,3 +401,19 @@ u
 12042026 - 22:26 - Ah, as aventuras do desenvolvimento. Fiquei uma hora e pouco tentando usar o dart com hotreload + utopia tui (tipo widgets para TUI) mas nao deu muito certo. No final estou voltando com python e lendo a doc https://textual.textualize.io/tutorial/ do textual, plataforma que o claude code vibe codou pra mim.
 
 12042026 - 22:26 - ok gastei 1hr30 nisso. Isso eh interessante.
+
+17042026 - 19:49 - claude code session
+
+*session ended (unknown reason)*
+
+17042026 - 19:53 - claude code session
+
+*session ended (unknown reason)*
+
+17042026 - 19:57 - claude code session
+
+*session ended (unknown reason)*
+
+17042026 - 20:05 - claude code session
+
+*session ended (unknown reason)*
