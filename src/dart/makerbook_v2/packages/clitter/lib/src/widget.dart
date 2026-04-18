@@ -34,13 +34,25 @@ abstract class StatelessWidget extends Widget {
   /// Describe this widget's UI in terms of other widgets.
   Widget build(BuildContext context);
 
+  /// Hook for providers to inject values into the context seen by
+  /// this widget's `build()` and its descendants. The default is the
+  /// ancestor context unchanged.
+  BuildContext buildContext(BuildContext parent) => parent;
+
   @override
   Size layout(BoxConstraints constraints) {
     // Rebuild every frame: picks up BLoC state, resize, etc.
-    _built = build(const BuildContext());
-    final childSize = _built!.layout(constraints);
-    size = childSize;
-    return size;
+    final parentContext = BuildContext.current;
+    final ctx = buildContext(parentContext);
+    BuildContext.current = ctx;
+    try {
+      _built = build(ctx);
+      final childSize = _built!.layout(constraints);
+      size = childSize;
+      return size;
+    } finally {
+      BuildContext.current = parentContext;
+    }
   }
 
   @override

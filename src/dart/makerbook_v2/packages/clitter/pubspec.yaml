@@ -11,3 +11,8 @@ environment:
 # bloc state changes into the render loop (see src/app.dart).
 dependencies:
   bloc: ^9.0.0
+
+  # Enables VM-service hot reload. Clitter opts in transparently inside
+  # `runApp`: if the process was started with `--enable-vm-service`,
+  # reloads trigger a repaint; otherwise the attempt is a silent no-op.
+  hotreloader: ^4.2.0

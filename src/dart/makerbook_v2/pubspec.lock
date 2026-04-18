@@ -24,6 +24,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  clitter_bloc:
+    dependency: "direct main"
+    description:
+      path: "packages/clitter_bloc"
+      relative: true
+    source: path
+    version: "0.1.0"
   collection:
     dependency: transitive
     description:
@@ -32,8 +39,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
-  hotreloader:
+  equatable:
     dependency: "direct main"
+    description:
+      name: equatable
+      sha256: "3e0141505477fd8ad55d6eb4e7776d3fe8430be8e497ccb1521370c3f21a3e2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.8"
+  hotreloader:
+    dependency: transitive
     description:
       name: hotreloader
       sha256: "66871df468fc24eee81f1a0a7cb98acc104716f9b7376d355437b48d633c4ebf"

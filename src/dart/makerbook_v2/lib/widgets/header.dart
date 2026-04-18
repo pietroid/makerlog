@@ -7,21 +7,20 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      border: Border(style: LineStyle.thin, color: Color.rgb(0, 150, 100)),
       width: double.infinity,
-      color: Color.rgb(0, 0, 0),
       child: Padding(
         padding: const EdgeInsets.only(
-          left: 2,
-          top: 1,
-          bottom: 1,
-          right: 2,
+          left: 1,
+          top: 0,
+          bottom: 0,
+          right: 1,
         ),
         child: Text(
           'makerbook',
           style: TextStyle(
-            color: Color.rgb(200, 255, 160),
+            color: Color.rgb(0, 200, 150),
             fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
           ),
         ),
       ),

@@ -8,7 +8,8 @@
       "version": "0.2.0",
       "dependencies": [
         "clitter",
-        "hotreloader"
+        "clitter_bloc",
+        "equatable"
       ],
       "devDependencies": [
         "lints"
@@ -20,6 +21,47 @@
       "dependencies": []
     },
     {
+      "name": "equatable",
+      "version": "2.0.8",
+      "dependencies": [
+        "collection",
+        "meta"
+      ]
+    },
+    {
+      "name": "clitter_bloc",
+      "version": "0.1.0",
+      "dependencies": [
+        "bloc",
+        "clitter"
+      ]
+    },
+    {
+      "name": "clitter",
+      "version": "0.1.0",
+      "dependencies": [
+        "bloc",
+        "hotreloader"
+      ]
+    },
+    {
+      "name": "meta",
+      "version": "1.18.2",
+      "dependencies": []
+    },
+    {
+      "name": "collection",
+      "version": "1.19.1",
+      "dependencies": []
+    },
+    {
+      "name": "bloc",
+      "version": "9.2.0",
+      "dependencies": [
+        "meta"
+      ]
+    },
+    {
       "name": "hotreloader",
       "version": "4.4.0",
       "dependencies": [
@@ -28,13 +70,6 @@
         "stream_transform",
         "vm_service",
         "watcher"
-      ]
-    },
-    {
-      "name": "clitter",
-      "version": "0.1.0",
-      "dependencies": [
-        "bloc"
       ]
     },
     {
@@ -70,23 +105,6 @@
       "version": "2.13.1",
       "dependencies": [
         "collection",
-        "meta"
-      ]
-    },
-    {
-      "name": "meta",
-      "version": "1.18.2",
-      "dependencies": []
-    },
-    {
-      "name": "collection",
-      "version": "1.19.1",
-      "dependencies": []
-    },
-    {
-      "name": "bloc",
-      "version": "9.2.0",
-      "dependencies": [
         "meta"
       ]
     }

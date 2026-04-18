@@ -11,12 +11,9 @@ dependencies:
   # hot-reload alongside the app.
   clitter:
     path: packages/clitter
-
-  # Optional: enables true Flutter-style hot reload. If you don't want
-  # the dependency, delete this line and the HotReloader.create() call
-  # in lib/main.dart — the app still runs, you just restart to see
-  # code changes.
-  hotreloader: ^4.2.0
+  clitter_bloc:
+    path: packages/clitter_bloc
+  equatable: ^2.0.8
 
 dev_dependencies:
   lints: ^3.0.0

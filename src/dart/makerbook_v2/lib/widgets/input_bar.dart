@@ -1,11 +1,11 @@
 import 'package:clitter/clitter.dart';
 
-import '../bloc/chat_bloc.dart';
+import '../chat/cubit/chat_cubit.dart';
 
 /// Bottom input bar: a dark, single-row strip with a prompt marker and
 /// the TextField. Hits Enter to submit into the chat BLoC and clear.
 class InputBar extends StatelessWidget {
-  final ChatBloc bloc;
+  final ChatCubit bloc;
 
   /// Injected by the parent. Must outlive a single rebuild — see
   /// [MakerbookApp]'s note. A TextField without a stable controller

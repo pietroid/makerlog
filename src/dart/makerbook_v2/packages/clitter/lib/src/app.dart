@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:hotreloader/hotreloader.dart';
 
 import 'canvas.dart';
 import 'constraints.dart';
@@ -45,6 +46,19 @@ typedef VoidCallback = void Function();
 Future<void> runApp(Widget root) async {
   // Route every bloc/cubit emit through the render loop.
   Bloc.observer = _RebuildOnEmitObserver();
+
+  // Opportunistic hot reload. `HotReloader.create` throws if the VM
+  // service wasn't enabled (plain `dart run`); swallow that so apps
+  // don't need to care — the feature is on when available and silent
+  // when not. When a reload lands, force a repaint so the new code
+  // is actually rendered.
+  try {
+    await HotReloader.create(
+      onAfterReload: (_) => App.scheduleRebuild(),
+    );
+  } catch (_) {
+    // VM service unavailable — proceed without hot reload.
+  }
 
   final terminal = Terminal();
 

@@ -14,13 +14,13 @@ library clitter;
 export 'src/app.dart';
 export 'src/widget.dart';
 export 'src/build_context.dart';
+export 'src/provider.dart';
 export 'src/constraints.dart';
 export 'src/canvas.dart';
 export 'src/color.dart';
 export 'src/text_style.dart';
 export 'src/input.dart';
 export 'src/text_editing_controller.dart';
-export 'src/hot_reload.dart';
 
 // Built-in widgets
 export 'src/widgets/text.dart';
@@ -32,9 +32,9 @@ export 'src/widgets/sized_box.dart';
 export 'src/widgets/padding.dart';
 export 'src/widgets/center.dart';
 export 'src/widgets/container.dart';
+export 'src/widgets/divider.dart';
 
-// BLoC integration — re-export the real `bloc` package so apps can
-// `import 'package:clitter/clitter.dart';` and get Cubit/Bloc/etc.
-// alongside clitter's own BlocBuilder.
-export 'package:bloc/bloc.dart';
-export 'src/bloc/bloc_builder.dart';
+// Bloc integration lives in the sibling `clitter_bloc` package so the
+// core framework stays agnostic of any particular state-management
+// library. Apps that want BlocProvider / BlocBuilder:
+//   import 'package:clitter_bloc/clitter_bloc.dart';
