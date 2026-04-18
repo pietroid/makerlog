@@ -1,9 +1,9 @@
 import 'package:clitter/clitter.dart';
 
 import '../bloc/chat_bloc.dart';
-import '../components/chat_history.dart';
-import '../components/header.dart';
-import '../components/input_bar.dart';
+import '../widgets/chat_history.dart';
+import '../widgets/header.dart';
+import '../widgets/input_bar.dart';
 
 /// Root widget — lays out the three regions of the UI:
 ///

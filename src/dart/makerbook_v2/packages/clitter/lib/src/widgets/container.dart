@@ -12,12 +12,20 @@ import 'padding.dart';
 ///   * With a [child]: shrink-wrap to the child's size (plus padding).
 ///   * Without a [child]: expand to fill the parent's constraints.
 ///   * Explicit [width]/[height] always wins over the above.
+///   * Pass [double.infinity] as [width]/[height] to fill the incoming
+///     max on that axis, exactly like Flutter.
 ///
 /// The [color] is painted as a background — text drawn on top by a
 /// descendant inherits it unless that text sets its own background.
 class Container extends Widget {
-  final int? width;
-  final int? height;
+  /// Width in character cells. Accepts an int, or [double.infinity] to
+  /// fill the parent's incoming `maxWidth` (Flutter-style).
+  final num? width;
+
+  /// Height in character cells. Accepts an int, or [double.infinity]
+  /// to fill the parent's incoming `maxHeight` (Flutter-style).
+  final num? height;
+
   final Color? color;
   final EdgeInsets? padding;
   final Widget? child;
@@ -40,9 +48,13 @@ class Container extends Widget {
         ? Padding(padding: padding!, child: child!)
         : child;
 
-    // Clamp explicit size hints into whatever our parent offered.
-    final maxW = width ?? constraints.maxWidth;
-    final maxH = height ?? constraints.maxHeight;
+    // Resolve `double.infinity` against the incoming max; otherwise
+    // the width/height is already a finite int-valued num.
+    final resolvedW = _resolve(width, constraints.maxWidth);
+    final resolvedH = _resolve(height, constraints.maxHeight);
+
+    final maxW = resolvedW ?? constraints.maxWidth;
+    final maxH = resolvedH ?? constraints.maxHeight;
 
     int w;
     int h;
@@ -51,12 +63,12 @@ class Container extends Widget {
       final childSize = _content!.layout(
         BoxConstraints(maxWidth: maxW, maxHeight: maxH),
       );
-      w = width ?? childSize.width;
-      h = height ?? childSize.height;
+      w = resolvedW ?? childSize.width;
+      h = resolvedH ?? childSize.height;
     } else {
       // No child: fill whatever the parent gave us.
-      w = width ?? constraints.maxWidth;
-      h = height ?? constraints.maxHeight;
+      w = resolvedW ?? constraints.maxWidth;
+      h = resolvedH ?? constraints.maxHeight;
     }
 
     size = Size(
@@ -80,5 +92,14 @@ class Container extends Widget {
       );
     }
     _content?.paint(canvas, offset);
+  }
+
+  // Turn a user-supplied width/height (which may be `double.infinity`
+  // to request "fill the parent") into a concrete int, or null when
+  // the user didn't specify anything.
+  static int? _resolve(num? value, int parentMax) {
+    if (value == null) return null;
+    if (value == double.infinity) return parentMax;
+    return value.toInt();
   }
 }

@@ -2,6 +2,18 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "bloc",
+      "rootUri": "file:///Users/pietroteruya/.pub-cache/hosted/pub.dev/bloc-9.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "meta",
+      "rootUri": "file:///Users/pietroteruya/.pub-cache/hosted/pub.dev/meta-1.18.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
       "name": "clitter",
       "rootUri": "../",
       "packageUri": "lib/",

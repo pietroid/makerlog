@@ -33,6 +33,8 @@ export 'src/widgets/padding.dart';
 export 'src/widgets/center.dart';
 export 'src/widgets/container.dart';
 
-// BLoC integration
-export 'src/bloc/bloc.dart';
+// BLoC integration — re-export the real `bloc` package so apps can
+// `import 'package:clitter/clitter.dart';` and get Cubit/Bloc/etc.
+// alongside clitter's own BlocBuilder.
+export 'package:bloc/bloc.dart';
 export 'src/bloc/bloc_builder.dart';

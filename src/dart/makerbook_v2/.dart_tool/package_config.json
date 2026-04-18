@@ -8,6 +8,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "bloc",
+      "rootUri": "file:///Users/pietroteruya/.pub-cache/hosted/pub.dev/bloc-9.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "clitter",
       "rootUri": "../packages/clitter",
       "packageUri": "lib/",

@@ -15,7 +15,7 @@ class ChatState {
 
 /// Holds the chat log. Expose a small command API ([send]) and keep
 /// state derivation to pure functions inside [ChatState].
-class ChatBloc extends Bloc<ChatState> {
+class ChatBloc extends Cubit<ChatState> {
   ChatBloc() : super(const ChatState());
 
   /// Append a user message. Blank submissions are ignored so hitting

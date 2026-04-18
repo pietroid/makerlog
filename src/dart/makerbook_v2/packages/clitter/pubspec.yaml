@@ -6,6 +6,8 @@ publish_to: none
 environment:
   sdk: ^3.0.0
 
-# Clitter is intentionally dependency-free — it only needs dart:io and
-# dart:async from the SDK. Hot reload is wired up by the host app
-# (see makerbook_v2/lib/main.dart) so clitter stays small.
+# State management is delegated to the `bloc` package so apps can use
+# the ecosystem's Cubit/Bloc directly. Clitter's job is just to bridge
+# bloc state changes into the render loop (see src/app.dart).
+dependencies:
+  bloc: ^9.0.0

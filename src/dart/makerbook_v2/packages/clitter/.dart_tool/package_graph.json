@@ -6,8 +6,22 @@
     {
       "name": "clitter",
       "version": "0.1.0",
-      "dependencies": [],
+      "dependencies": [
+        "bloc"
+      ],
       "devDependencies": []
+    },
+    {
+      "name": "bloc",
+      "version": "9.2.0",
+      "dependencies": [
+        "meta"
+      ]
+    },
+    {
+      "name": "meta",
+      "version": "1.18.2",
+      "dependencies": []
     }
   ],
   "configVersion": 1

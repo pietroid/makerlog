@@ -1,11 +1,24 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bloc/bloc.dart';
+
 import 'canvas.dart';
 import 'constraints.dart';
 import 'input.dart';
 import 'terminal.dart';
 import 'widget.dart';
+
+/// Bridges the `bloc` package into clitter's render loop: every
+/// Cubit/Bloc state change triggers a repaint, so `BlocBuilder` never
+/// has to manage its own subscription.
+class _RebuildOnEmitObserver extends BlocObserver {
+  @override
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
+    super.onChange(bloc, change);
+    App.scheduleRebuild();
+  }
+}
 
 /// Global handle to the currently running app. Exposes
 /// [scheduleRebuild] so BLoCs and controllers can trigger a repaint
@@ -30,6 +43,9 @@ typedef VoidCallback = void Function();
 ///   * the terminal is resized (SIGWINCH)
 ///   * a hot reload fires (see hot_reload.dart)
 Future<void> runApp(Widget root) async {
+  // Route every bloc/cubit emit through the render loop.
+  Bloc.observer = _RebuildOnEmitObserver();
+
   final terminal = Terminal();
 
   terminal.enterRawMode();

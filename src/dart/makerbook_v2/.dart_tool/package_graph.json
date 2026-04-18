@@ -20,11 +20,6 @@
       "dependencies": []
     },
     {
-      "name": "clitter",
-      "version": "0.1.0",
-      "dependencies": []
-    },
-    {
       "name": "hotreloader",
       "version": "4.4.0",
       "dependencies": [
@@ -36,14 +31,11 @@
       ]
     },
     {
-      "name": "stream_transform",
-      "version": "2.1.1",
-      "dependencies": []
-    },
-    {
-      "name": "path",
-      "version": "1.9.1",
-      "dependencies": []
+      "name": "clitter",
+      "version": "0.1.0",
+      "dependencies": [
+        "bloc"
+      ]
     },
     {
       "name": "watcher",
@@ -52,6 +44,21 @@
         "async",
         "path"
       ]
+    },
+    {
+      "name": "vm_service",
+      "version": "15.1.0",
+      "dependencies": []
+    },
+    {
+      "name": "stream_transform",
+      "version": "2.1.1",
+      "dependencies": []
+    },
+    {
+      "name": "path",
+      "version": "1.9.1",
+      "dependencies": []
     },
     {
       "name": "logging",
@@ -67,19 +74,21 @@
       ]
     },
     {
-      "name": "collection",
-      "version": "1.19.1",
-      "dependencies": []
-    },
-    {
       "name": "meta",
       "version": "1.18.2",
       "dependencies": []
     },
     {
-      "name": "vm_service",
-      "version": "15.1.0",
+      "name": "collection",
+      "version": "1.19.1",
       "dependencies": []
+    },
+    {
+      "name": "bloc",
+      "version": "9.2.0",
+      "dependencies": [
+        "meta"
+      ]
     }
   ],
   "configVersion": 1
