@@ -13,6 +13,8 @@ dependencies:
     path: packages/clitter
   clitter_bloc:
     path: packages/clitter_bloc
+  app_ui:
+    path: packages/app_ui
   equatable: ^2.0.8
 
 dev_dependencies:

@@ -17,7 +17,7 @@ class Header extends StatelessWidget {
           right: 1,
         ),
         child: Text(
-          'makerbook',
+          'makerlog',
           style: TextStyle(
             color: Color.rgb(0, 200, 150),
             fontWeight: FontWeight.bold,

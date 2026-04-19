@@ -13,20 +13,22 @@ class InputBar extends StatelessWidget {
   /// instance.
   final TextEditingController controller;
 
-  InputBar({required this.bloc, required this.controller});
+  final String? placeholder;
+
+  InputBar({
+    required this.bloc,
+    required this.controller,
+    this.placeholder,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Dark background so the input visually "sits below" the chat
-      // content. Extends edge-to-edge because Container paints a fill.
       color: Color.black,
       height: 1,
       padding: const EdgeInsets.symmetric(horizontal: 1),
       child: Row(
         children: [
-          // Prompt marker in bright cyan — no background set, so the
-          // Container's black shows through (that's the merge rule).
           Text(
             '❯ ',
             style: const TextStyle(
@@ -37,9 +39,9 @@ class InputBar extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
-              placeholder: 'type here...',
+              placeholder: placeholder ?? 'type here...',
               onSubmit: (text) {
-                bloc.send(text);
+                bloc.submit(text);
                 controller.clear();
               },
               style: const TextStyle(color: Color.brightWhite),
