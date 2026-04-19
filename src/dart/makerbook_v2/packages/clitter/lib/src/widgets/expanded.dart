@@ -1,5 +1,6 @@
 import '../canvas.dart';
 import '../constraints.dart';
+import '../framework.dart';
 import '../widget.dart';
 
 /// Marker widget: inside a Column or Row, an [Expanded] child is
@@ -15,7 +16,7 @@ class Expanded extends Widget {
 
   @override
   Size layout(BoxConstraints constraints) {
-    final childSize = child.layout(constraints);
+    final childSize = Framework.layoutChild(child, constraints);
     size = constraints.constrain(childSize);
     return size;
   }

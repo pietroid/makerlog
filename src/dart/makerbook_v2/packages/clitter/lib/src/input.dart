@@ -125,6 +125,7 @@ class _FocusTarget {
 /// the sample app and easy to add later.
 class FocusManager {
   static _FocusTarget? _target;
+  static final List<void Function(KeyEvent)> _listeners = [];
 
   /// Where the terminal cursor should be parked after the frame is
   /// painted. Set by TextField during paint.
@@ -135,6 +136,7 @@ class FocusManager {
   static void reset() {
     _target = null;
     cursor = null;
+    _listeners.clear();
   }
 
   /// Mark [controller] as the focused input for this frame.
@@ -145,9 +147,24 @@ class FocusManager {
     _target = _FocusTarget(controller, onSubmit);
   }
 
+  /// Register a raw key callback for this frame. Re-requested every
+  /// paint by [KeyboardListener], mirroring how [request] works for
+  /// text inputs. Listeners see every decoded key (minus Ctrl-C, which
+  /// the runtime swallows for clean exit).
+  static void addKeyListener(void Function(KeyEvent) onKeyEvent) {
+    _listeners.add(onKeyEvent);
+  }
+
   /// Route a key event to the focused controller. Called by the
   /// runtime once per decoded key.
   static void dispatch(KeyEvent event) {
+    // Fan out to KeyboardListener widgets first so app-level handlers
+    // (navigation, shortcuts) always see the event, even when a
+    // TextField is focused.
+    for (final l in _listeners) {
+      l(event);
+    }
+
     final target = _target;
     if (target == null) return;
 

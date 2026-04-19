@@ -18,38 +18,63 @@ import 'package:clitter/clitter.dart';
 /// BlocProvider<AppCubit>.value(value: appCubit, child: MyWidget())
 /// ```
 ///
-/// The [create] callback runs lazily on first access and the bloc is
-/// cached so the widget's per-frame rebuild doesn't spin up new blocs.
-///
-/// Inside the subtree:
-///
-/// ```dart
-/// final cubit = context.read<AppCubit>();
-/// BlocBuilder<AppCubit, AppState>(builder: (c, s) => ...);
-/// ```
+/// Implemented as a [StatefulWidget] so the bloc is constructed once
+/// per mount — even though `build()` recreates the BlocProvider widget
+/// every frame, its [State] (and the bloc it owns) survives via
+/// [Framework]'s path-keyed state cache. The `create`-constructed
+/// bloc is `close()`d automatically when the widget leaves the tree.
 class BlocProvider<T extends BlocBase<Object?>>
-    extends SingleChildStatelessWidget {
+    extends SingleChildStatefulWidget {
   final T Function(BuildContext context)? _create;
   final T? _value;
-  T? _instance;
 
   BlocProvider({
     required T Function(BuildContext context) create,
     super.child,
+    super.key,
   })  : _create = create,
         _value = null;
 
-  BlocProvider.value({required T value, super.child})
-      : _create = null,
-        _value = value,
-        _instance = value;
+  BlocProvider.value({
+    required T value,
+    super.child,
+    super.key,
+  })  : _create = null,
+        _value = value;
 
-  T _resolve(BuildContext context) {
-    if (_value != null) return _value!;
-    return _instance ??= _create!(context);
+  @override
+  State<BlocProvider<T>> createState() => _BlocProviderState<T>();
+}
+
+class _BlocProviderState<T extends BlocBase<Object?>>
+    extends State<BlocProvider<T>> {
+  late T _bloc;
+  bool _ownsBloc = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final value = widget._value;
+    if (value != null) {
+      _bloc = value;
+    } else {
+      _bloc = widget._create!(context);
+      _ownsBloc = true;
+    }
   }
 
   @override
-  BuildContext buildContext(BuildContext parent) =>
-      parent.provide<T>(_resolve(parent));
+  void dispose() {
+    if (_ownsBloc) _bloc.close();
+    super.dispose();
+  }
+
+  @override
+  BuildContext buildContext(BuildContext parent) => parent.provide<T>(_bloc);
+
+  @override
+  Widget build(BuildContext context) {
+    assert(widget.child != null, 'BlocProvider was built without a child');
+    return widget.child!;
+  }
 }

@@ -1,6 +1,7 @@
 import 'build_context.dart';
 import 'canvas.dart';
 import 'constraints.dart';
+import 'framework.dart';
 
 /// Base class for everything the runtime can render.
 ///
@@ -47,7 +48,7 @@ abstract class StatelessWidget extends Widget {
     BuildContext.current = ctx;
     try {
       _built = build(ctx);
-      final childSize = _built!.layout(constraints);
+      final childSize = Framework.layoutChild(_built!, constraints);
       size = childSize;
       return size;
     } finally {

@@ -1,6 +1,7 @@
 import '../canvas.dart';
 import '../color.dart';
 import '../constraints.dart';
+import '../framework.dart';
 import '../text_style.dart';
 import '../widget.dart';
 import 'divider.dart';
@@ -64,7 +65,8 @@ class Container extends Widget {
     int w;
     int h;
     if (_content != null) {
-      final childSize = _content!.layout(
+      final childSize = Framework.layoutChild(
+        _content!,
         BoxConstraints(maxWidth: innerMaxW, maxHeight: innerMaxH),
       );
       w = resolvedW ?? childSize.width + 2 * _bw;

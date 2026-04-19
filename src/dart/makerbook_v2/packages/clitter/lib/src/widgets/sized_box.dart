@@ -1,5 +1,6 @@
 import '../canvas.dart';
 import '../constraints.dart';
+import '../framework.dart';
 import '../widget.dart';
 
 /// Fixed-size container. Either:
@@ -32,7 +33,9 @@ class SizedBox extends Widget {
       constraints.constrainWidth(w),
       constraints.constrainHeight(h),
     );
-    child?.layout(BoxConstraints.tight(finalSize));
+    if (child != null) {
+      Framework.layoutChild(child!, BoxConstraints.tight(finalSize));
+    }
     size = finalSize;
     return size;
   }

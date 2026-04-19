@@ -8,4 +8,8 @@ class AppCubit extends Cubit<AppState> {
             userJourneyStage: UserJourneyStage.onboarding,
           ),
         );
+
+  void startMainApp() {
+    emit(AppState(userJourneyStage: UserJourneyStage.mainApp));
+  }
 }

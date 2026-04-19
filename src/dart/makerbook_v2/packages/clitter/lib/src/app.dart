@@ -1,25 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
 import 'package:hotreloader/hotreloader.dart';
 
 import 'canvas.dart';
 import 'constraints.dart';
+import 'framework.dart';
 import 'input.dart';
 import 'terminal.dart';
 import 'widget.dart';
-
-/// Bridges the `bloc` package into clitter's render loop: every
-/// Cubit/Bloc state change triggers a repaint, so `BlocBuilder` never
-/// has to manage its own subscription.
-class _RebuildOnEmitObserver extends BlocObserver {
-  @override
-  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
-    super.onChange(bloc, change);
-    App.scheduleRebuild();
-  }
-}
 
 /// Global handle to the currently running app. Exposes
 /// [scheduleRebuild] so BLoCs and controllers can trigger a repaint
@@ -44,9 +33,6 @@ typedef VoidCallback = void Function();
 ///   * the terminal is resized (SIGWINCH)
 ///   * a hot reload fires (see hot_reload.dart)
 Future<void> runApp(Widget root) async {
-  // Route every bloc/cubit emit through the render loop.
-  Bloc.observer = _RebuildOnEmitObserver();
-
   // Opportunistic hot reload. `HotReloader.create` throws if the VM
   // service wasn't enabled (plain `dart run`); swallow that so apps
   // don't need to care — the feature is on when available and silent
@@ -113,8 +99,9 @@ Future<void> runApp(Widget root) async {
 
     FocusManager.reset();
     final canvas = Canvas(size.width, size.height);
-    root.layout(BoxConstraints.tight(size));
+    Framework.layoutChild(root, BoxConstraints.tight(size));
     root.paint(canvas, const Offset.zero());
+    Framework.endFrame();
     // During the "off" phase of the blink we pass null so the cursor
     // is hidden by the terminal. The next tick paints it back.
     terminal.renderFrame(

@@ -1,5 +1,6 @@
 import '../canvas.dart';
 import '../constraints.dart';
+import '../framework.dart';
 import '../widget.dart';
 
 /// Insets for a widget. All four sides are integers measured in
@@ -51,7 +52,7 @@ class Padding extends Widget {
       minHeight: (constraints.minHeight - padding.vertical).clamp(0, 1 << 30),
       maxHeight: (constraints.maxHeight - padding.vertical).clamp(0, 1 << 30),
     );
-    final childSize = child.layout(innerConstraints);
+    final childSize = Framework.layoutChild(child, innerConstraints);
     size = Size(
       constraints.constrainWidth(childSize.width + padding.horizontal),
       constraints.constrainHeight(childSize.height + padding.vertical),

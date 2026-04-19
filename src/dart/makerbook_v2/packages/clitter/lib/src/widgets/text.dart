@@ -11,13 +11,19 @@ import '../widget.dart';
 /// italic. A null attribute on the style means "don't override" —
 /// handy for drawing text over a coloured [Container] without
 /// repeating the background colour.
+/// Horizontal alignment of each line within the widget's width.
+/// When set, the widget expands to the parent's max width so the
+/// alignment has room to operate.
+enum TextAlign { start, center, end }
+
 class Text extends Widget {
   final String data;
   final TextStyle? style;
+  final TextAlign? align;
 
   List<String> _lines = const [];
 
-  Text(this.data, {this.style});
+  Text(this.data, {this.style, this.align});
 
   @override
   Size layout(BoxConstraints constraints) {
@@ -28,8 +34,12 @@ class Text extends Widget {
       if (line.length > widest) widest = line.length;
     }
 
+    // Alignment needs a canvas wider than the content; when an align
+    // is specified, stretch to the max width the parent allows.
+    final targetWidth = align == null ? widest : constraints.maxWidth;
+
     size = Size(
-      constraints.constrainWidth(widest),
+      constraints.constrainWidth(targetWidth),
       constraints.constrainHeight(_lines.length),
     );
     return size;
@@ -38,7 +48,20 @@ class Text extends Widget {
   @override
   void paint(Canvas canvas, Offset offset) {
     for (int i = 0; i < _lines.length; i++) {
-      canvas.drawText(offset.dx, offset.dy + i, _lines[i], style: style);
+      final line = _lines[i];
+      int dx;
+      switch (align ?? TextAlign.start) {
+        case TextAlign.start:
+          dx = 0;
+          break;
+        case TextAlign.center:
+          dx = (size.width - line.length) ~/ 2;
+          break;
+        case TextAlign.end:
+          dx = size.width - line.length;
+          break;
+      }
+      canvas.drawText(offset.dx + dx, offset.dy + i, line, style: style);
     }
   }
 

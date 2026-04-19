@@ -1,5 +1,6 @@
 import '../canvas.dart';
 import '../constraints.dart';
+import '../framework.dart';
 import '../widget.dart';
 
 /// Centres a [child] inside the space its parent grants. Takes the
@@ -12,7 +13,7 @@ class Center extends Widget {
 
   @override
   Size layout(BoxConstraints constraints) {
-    child.layout(constraints.loosen());
+    Framework.layoutChild(child, constraints.loosen());
     size = Size(constraints.maxWidth, constraints.maxHeight);
     return size;
   }
