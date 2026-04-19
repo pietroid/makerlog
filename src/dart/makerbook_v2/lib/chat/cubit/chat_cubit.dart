@@ -14,7 +14,7 @@ class ChatCubit extends Cubit<ChatState> {
   final ChatRepository repository;
   Timer? _typingTimer;
 
-  static const Duration _tickInterval = Duration(milliseconds: 200);
+  static const Duration _tickInterval = Duration(milliseconds: 50);
 
   ChatCubit({required this.repository}) : super(const ChatState()) {
     _presentNextPrompt();
