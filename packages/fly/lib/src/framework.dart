@@ -4,7 +4,7 @@ import 'canvas.dart';
 import 'constraints.dart';
 import 'widget.dart';
 
-/// Clitter's mini element-tree.
+/// Fly's mini element-tree.
 ///
 /// Widget instances are thrown away and recreated every frame, so any
 /// long-lived state has to live somewhere else. [Framework] keeps a

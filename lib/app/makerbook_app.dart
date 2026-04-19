@@ -1,5 +1,5 @@
-import 'package:clitter/clitter.dart';
-import 'package:clitter_bloc/clitter_bloc.dart';
+import 'package:fly/fly.dart';
+import 'package:fly_bloc/fly_bloc.dart';
 import 'package:makerlog/app/bloc/app_state.dart';
 import 'package:makerlog/chat/view/chat_page.dart';
 import 'package:makerlog/onboarding/view/onboarding_page.dart';

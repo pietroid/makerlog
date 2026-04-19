@@ -5,7 +5,7 @@ import '../widget.dart';
 /// Flutter-style keyboard listener. Wrap any subtree to receive every
 /// decoded [KeyEvent] while that subtree is mounted.
 ///
-/// Unlike Flutter's version clitter has no focus tree, so there is no
+/// Unlike Flutter's version fly has no focus tree, so there is no
 /// [FocusNode] to pass — a listener is always "active" while it's
 /// painted. If multiple [KeyboardListener]s are in the tree they all
 /// fire, in paint order.

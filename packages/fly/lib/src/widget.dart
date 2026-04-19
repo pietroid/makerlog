@@ -5,7 +5,7 @@ import 'framework.dart';
 
 /// Base class for everything the runtime can render.
 ///
-/// Unlike Flutter, clitter widgets are not immutable render-object
+/// Unlike Flutter, fly widgets are not immutable render-object
 /// factories — they're re-used directly as the layout node. Each frame
 /// the runtime calls [layout] to compute a size (stored in [size])
 /// and then [paint] to draw. This keeps the framework small at the
@@ -27,7 +27,7 @@ abstract class Widget {
 }
 
 /// A widget whose layout is entirely defined by another widget,
-/// obtained by calling [build]. This is the clitter analogue of
+/// obtained by calling [build]. This is the fly analogue of
 /// Flutter's StatelessWidget.
 abstract class StatelessWidget extends Widget {
   Widget? _built;

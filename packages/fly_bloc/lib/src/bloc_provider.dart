@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:clitter/clitter.dart';
+import 'package:fly/fly.dart';
 
 /// Exposes a [BlocBase] instance to descendants via [BuildContext.read].
 ///

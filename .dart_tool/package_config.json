@@ -20,18 +20,6 @@
       "languageVersion": "2.14"
     },
     {
-      "name": "clitter",
-      "rootUri": "../packages/clitter",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
-      "name": "clitter_bloc",
-      "rootUri": "../packages/clitter_bloc",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
       "name": "collection",
       "rootUri": "file:///Users/pietroteruya/.pub-cache/hosted/pub.dev/collection-1.19.1",
       "packageUri": "lib/",
@@ -42,6 +30,18 @@
       "rootUri": "file:///Users/pietroteruya/.pub-cache/hosted/pub.dev/equatable-2.0.8",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "fly",
+      "rootUri": "../packages/fly",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "fly_bloc",
+      "rootUri": "../packages/fly_bloc",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "hotreloader",

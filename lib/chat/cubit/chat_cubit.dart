@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:clitter_bloc/clitter_bloc.dart';
+import 'package:fly_bloc/fly_bloc.dart';
 import 'package:makerlog/chat/cubit/chat_state.dart';
 import 'package:makerlog/chat/repository/chat_message.dart';
 import 'package:makerlog/chat/repository/chat_repository.dart';

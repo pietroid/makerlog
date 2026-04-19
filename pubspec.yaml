@@ -9,10 +9,10 @@ environment:
 dependencies:
   # The framework lives in-tree as a path package so edits there
   # hot-reload alongside the app.
-  clitter:
-    path: packages/clitter
-  clitter_bloc:
-    path: packages/clitter_bloc
+  fly:
+    path: packages/fly
+  fly_bloc:
+    path: packages/fly_bloc
   app_ui:
     path: packages/app_ui
   equatable: ^2.0.8

@@ -1,4 +1,4 @@
-import 'package:clitter/clitter.dart';
+import 'package:fly/fly.dart';
 import 'package:makerlog/app/bloc/app_cubit.dart';
 
 class OnboardingPage extends StatelessWidget {

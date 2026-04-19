@@ -1,14 +1,14 @@
-/// Clitter — Flutter-like framework for building CLI apps.
+/// Fly — Flutter-like framework for building CLI apps.
 ///
 /// Import this single file to get the full public API:
 ///
-///   import 'package:clitter/clitter.dart';
+///   import 'package:fly/fly.dart';
 ///
 /// The design mirrors Flutter at the surface (Widget, StatelessWidget,
 /// Column, Row, Text, TextField, BlocBuilder, ...) but underneath the
 /// render target is a terminal and layout is measured in character
 /// cells instead of pixels.
-library clitter;
+library fly;
 
 // Core runtime
 export 'src/app.dart';
@@ -38,7 +38,7 @@ export 'src/widgets/divider.dart';
 export 'src/widgets/ascii_image.dart';
 export 'src/widgets/keyboard_listener.dart';
 
-// Bloc integration lives in the sibling `clitter_bloc` package so the
+// Bloc integration lives in the sibling `fly_bloc` package so the
 // core framework stays agnostic of any particular state-management
 // library. Apps that want BlocProvider / BlocBuilder:
-//   import 'package:clitter_bloc/clitter_bloc.dart';
+//   import 'package:fly_bloc/fly_bloc.dart';

@@ -1,4 +1,4 @@
-import 'package:clitter/clitter.dart';
+import 'package:fly/fly.dart';
 
 /// Keyboard-driven numbered options list. Arrow up/down moves the
 /// highlight, Enter commits the selected option back to the parent as

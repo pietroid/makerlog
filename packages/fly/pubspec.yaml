@@ -1,4 +1,4 @@
-name: clitter
+name: fly
 description: A Flutter-like framework for building terminal (CLI) apps in Dart.
 version: 0.1.0
 publish_to: none
@@ -7,12 +7,12 @@ environment:
   sdk: ^3.0.0
 
 # State management is delegated to the `bloc` package so apps can use
-# the ecosystem's Cubit/Bloc directly. Clitter's job is just to bridge
+# the ecosystem's Cubit/Bloc directly. Fly's job is just to bridge
 # bloc state changes into the render loop (see src/app.dart).
 dependencies:
   bloc: ^9.0.0
 
-  # Enables VM-service hot reload. Clitter opts in transparently inside
+  # Enables VM-service hot reload. Fly opts in transparently inside
   # `runApp`: if the process was started with `--enable-vm-service`,
   # reloads trigger a repaint; otherwise the attempt is a silent no-op.
   hotreloader: ^4.2.0

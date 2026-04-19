@@ -1,5 +1,5 @@
 name: app_ui
-description: Shared presentational widgets for Makerbook (built on clitter).
+description: Shared presentational widgets for Makerbook (built on fly).
 version: 0.1.0
 publish_to: none
 
@@ -7,5 +7,5 @@ environment:
   sdk: ^3.0.0
 
 dependencies:
-  clitter:
-    path: ../clitter
+  fly:
+    path: ../fly

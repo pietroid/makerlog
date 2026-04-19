@@ -1,4 +1,4 @@
-import 'package:clitter/clitter.dart';
+import 'package:fly/fly.dart';
 
 import '../chat/cubit/chat_cubit.dart';
 

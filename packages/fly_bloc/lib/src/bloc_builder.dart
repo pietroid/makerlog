@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:clitter/clitter.dart';
+import 'package:fly/fly.dart';
 
 /// Rebuilds a subtree from a [BlocBase]'s current state. Equivalent
 /// in spirit to flutter_bloc's `BlocBuilder`: subscribes to the bloc

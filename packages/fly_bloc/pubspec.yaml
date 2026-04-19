@@ -1,0 +1,12 @@
+name: fly_bloc
+description: Bloc integration for the Fly terminal-UI framework — BlocProvider and BlocBuilder backed by fly's BuildContext.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  fly:
+    path: ../fly
+  bloc: ^9.0.0

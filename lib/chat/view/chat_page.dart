@@ -1,6 +1,6 @@
 import 'package:app_ui/app_ui.dart';
-import 'package:clitter/clitter.dart';
-import 'package:clitter_bloc/clitter_bloc.dart';
+import 'package:fly/fly.dart';
+import 'package:fly_bloc/fly_bloc.dart';
 import 'package:makerlog/chat/cubit/chat_cubit.dart';
 import 'package:makerlog/chat/cubit/chat_state.dart';
 import 'package:makerlog/chat/repository/chat_repository.dart';

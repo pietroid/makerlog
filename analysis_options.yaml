@@ -7,6 +7,6 @@ analyzer:
 
 linter:
   rules:
-    # We import `Text`, `Row`, `Column` by design — clitter is
+    # We import `Text`, `Row`, `Column` by design — fly is
     # Flutter-like. Relax a few Dart-lints that would otherwise nag.
     avoid_print: false

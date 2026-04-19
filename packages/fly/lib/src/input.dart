@@ -1,7 +1,7 @@
 import 'constraints.dart';
 import 'text_editing_controller.dart';
 
-/// Kinds of key events clitter recognises. Anything not in this list
+/// Kinds of key events fly recognises. Anything not in this list
 /// is surfaced as [KeyType.other] and generally ignored.
 enum KeyType {
   character,
