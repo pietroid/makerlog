@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "makerlog",
+      "type": "dart",
+      "request": "launch",
+      "program": "bin/makerlog.dart",
+      "console": "terminal",
+      "toolArgs": ["--enable-vm-service", "--observe"]
+    }
+  ]
+}
