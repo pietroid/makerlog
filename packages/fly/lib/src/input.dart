@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'constraints.dart';
 import 'text_editing_controller.dart';
 
@@ -96,6 +98,12 @@ class KeyParser {
           events.add(const KeyEvent(KeyType.altEnter));
           i += 2;
           continue;
+        } else if (i + 1 < bytes.length && bytes[i + 1] >= 32 && bytes[i + 1] < 127) {
+          // Alt+character: ESC followed by a printable ASCII char.
+          // Many terminals send Option+key this way.
+          events.add(KeyEvent(KeyType.character, String.fromCharCode(bytes[i + 1])));
+          i += 2;
+          continue;
         }
         events.add(const KeyEvent(KeyType.escape));
         i++;
@@ -114,13 +122,18 @@ class KeyParser {
           len = 2;
         }
         if (i + len <= bytes.length) {
-          final str = String.fromCharCodes(bytes.sublist(i, i + len));
+          final str = utf8.decode(bytes.sublist(i, i + len));
           events.add(KeyEvent(KeyType.character, str));
           i += len;
         } else {
           // Truncated sequence; skip.
           i++;
         }
+      } else if (b >= 128) {
+        // High-byte character (e.g. Latin-1, or a terminal that sets
+        // the high bit for Alt+key). Treat as a single code unit.
+        events.add(KeyEvent(KeyType.character, String.fromCharCode(b)));
+        i++;
       } else {
         // Some other control byte we don't care about.
         i++;
