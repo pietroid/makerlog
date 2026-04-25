@@ -33,6 +33,8 @@ class KeyEvent {
 ///   * plain ASCII (space through ~)
 ///   * control keys (Ctrl-C, Enter, Backspace, Tab)
 ///   * CSI sequences for arrow keys (ESC [ A/B/C/D)
+///   * Alt-modified keys (ESC + key, e.g. Alt+Enter)
+///   * SGR mouse events (ESC [ < btn ; x ; y M/m)
 ///   * multi-byte UTF-8 so emoji and accented chars come through intact
 ///
 /// It's forgiving: unknown sequences become [KeyType.other] so the
@@ -61,10 +63,18 @@ class KeyParser {
         events.add(const KeyEvent(KeyType.tab));
         i++;
       } else if (b == 27) {
-        // ESC: may be a CSI sequence (ESC [ X), an Alt-modified key,
-        // or a lone Escape press.
-        if (i + 1 < bytes.length && bytes[i + 1] == 91) {
-          // ESC [ = CSI sequence (arrow keys, etc.)
+        // ESC: CSI sequence, Alt+key, SGR mouse, or lone Escape.
+        if (i + 2 < bytes.length && bytes[i + 1] == 91) {
+          if (bytes[i + 2] == 60 && i + 5 < bytes.length) {
+            // ESC [ < = SGR mouse event
+            final mouse = _parseSgrMouse(bytes, i);
+            if (mouse != null) {
+              events.add(mouse);
+              i += mouse._consumedBytes;
+              continue;
+            }
+          }
+          // CSI sequence (arrow keys, etc.)
           if (i + 2 < bytes.length) {
             switch (bytes[i + 2]) {
               case 65:
@@ -119,6 +129,74 @@ class KeyParser {
 
     return events;
   }
+
+  /// SGR mouse protocol: ESC [ < btn ; x ; y (M | m)
+  /// Returns the event plus how many bytes were consumed, or null
+  /// if the sequence is malformed.
+  static _MouseKeyEvent? _parseSgrMouse(List<int> bytes, int start) {
+    // ESC [ <  already consumed at start..start+2
+    var i = start + 3; // position after '<'
+    final len = bytes.length;
+
+    int readNum() {
+      int n = 0;
+      bool hasDigit = false;
+      while (i < len && bytes[i] >= 48 && bytes[i] <= 57) {
+        hasDigit = true;
+        n = n * 10 + (bytes[i] - 48);
+        i++;
+      }
+      return hasDigit ? n : -1;
+    }
+
+    final btn = readNum();
+    if (btn < 0 || i >= len || bytes[i] != 59) return null;
+    i++;
+    final x = readNum();
+    if (x < 0 || i >= len || bytes[i] != 59) return null;
+    i++;
+    final y = readNum();
+    if (y < 0 || i >= len) return null;
+    final release = bytes[i] == 109; // 'm'
+    final press = bytes[i] == 77; // 'M'
+    if (!press && !release) return null;
+    i++;
+
+    final kind = _mouseKind(btn, press);
+    final m = MouseEvent(kind: kind, x: x - 1, y: y - 1);
+    return _MouseKeyEvent(m, i - start);
+  }
+
+  static MouseEventKind _mouseKind(int btn, bool pressed) {
+    // SGR button encoding:
+    // 0 = left, 1 = middle, 2 = right
+    // 64 = scroll up, 65 = scroll down
+    if (btn == 64) return MouseEventKind.scrollUp;
+    if (btn == 65) return MouseEventKind.scrollDown;
+    return MouseEventKind.unknown;
+  }
+}
+
+/// Kinds of mouse events the framework recognises.
+enum MouseEventKind { scrollUp, scrollDown, unknown }
+
+/// A decoded terminal mouse event.
+class MouseEvent {
+  final MouseEventKind kind;
+  final int x;
+  final int y;
+
+  MouseEvent({required this.kind, required this.x, required this.y});
+}
+
+/// Internal wrapper so a mouse event can ride through [KeyParser.parse]
+/// alongside regular [KeyEvent]s.
+class _MouseKeyEvent extends KeyEvent {
+  final MouseEvent mouse;
+  final int _consumedBytes;
+
+  _MouseKeyEvent(this.mouse, this._consumedBytes)
+      : super(KeyType.other);
 }
 
 /// Records the currently focused TextField, along with the callback
@@ -132,15 +210,12 @@ class _FocusTarget {
   _FocusTarget(this.controller, this.onSubmit, {this.multiline = false});
 }
 
-/// Tiny global focus manager. Intentionally simple: there is at most
-/// one focused controller at a time, and it's the last one to call
-/// [request] during a frame (typically: the only TextField on screen).
-///
-/// The alternative — a proper focus-traversal tree — is overkill for
-/// the sample app and easy to add later.
+/// Tiny global focus manager. The focused widget gets first dibs on
+/// incoming keys; if it doesn't consume them they bubble to listeners.
 class FocusManager {
   static _FocusTarget? _target;
-  static final List<void Function(KeyEvent)> _listeners = [];
+  static final List<void Function(KeyEvent)> _keyListeners = [];
+  static final List<void Function(MouseEvent)> _mouseListeners = [];
 
   /// Where the terminal cursor should be parked after the frame is
   /// painted. Set by TextField during paint.
@@ -151,7 +226,8 @@ class FocusManager {
   static void reset() {
     _target = null;
     cursor = null;
-    _listeners.clear();
+    _keyListeners.clear();
+    _mouseListeners.clear();
   }
 
   /// Mark [controller] as the focused input for this frame.
@@ -163,50 +239,76 @@ class FocusManager {
     _target = _FocusTarget(controller, onSubmit, multiline: multiline);
   }
 
-  /// Register a raw key callback for this frame. Re-requested every
-  /// paint by [KeyboardListener], mirroring how [request] works for
-  /// text inputs. Listeners see every decoded key (minus Ctrl-C, which
-  /// the runtime swallows for clean exit).
+  /// Register a raw key callback for this frame.
   static void addKeyListener(void Function(KeyEvent) onKeyEvent) {
-    _listeners.add(onKeyEvent);
+    _keyListeners.add(onKeyEvent);
   }
 
-  /// Route a key event to the focused controller. Called by the
-  /// runtime once per decoded key.
+  /// Register a mouse-event callback for this frame.
+  static void addMouseListener(void Function(MouseEvent) onMouseEvent) {
+    _mouseListeners.add(onMouseEvent);
+  }
+
+  /// Route a decoded event. Keys are offered to the focused target
+  /// first; if it doesn't consume them they are sent to listeners.
+  /// Mouse events go straight to listeners.
   static void dispatch(KeyEvent event) {
-    // Fan out to KeyboardListener widgets first so app-level handlers
-    // (navigation, shortcuts) always see the event, even when a
-    // TextField is focused.
-    for (final l in _listeners) {
-      l(event);
+    // Unwrap mouse events embedded in KeyEvent wrappers.
+    if (event is _MouseKeyEvent) {
+      for (final l in _mouseListeners) {
+        l(event.mouse);
+      }
+      return;
     }
 
     final target = _target;
-    if (target == null) return;
+    if (target != null) {
+      final consumed = _dispatchToTarget(event, target);
+      if (consumed) return;
+    }
 
+    for (final l in _keyListeners) {
+      l(event);
+    }
+  }
+
+  static bool _dispatchToTarget(KeyEvent event, _FocusTarget target) {
     switch (event.type) {
       case KeyType.character:
         final c = event.character;
-        if (c != null) target.controller.insert(c);
+        if (c != null) {
+          target.controller.insert(c);
+          return true;
+        }
+        return false;
       case KeyType.backspace:
         target.controller.backspace();
+        return true;
       case KeyType.enter:
         target.onSubmit?.call(target.controller.text);
+        return true;
       case KeyType.altEnter:
         if (target.multiline) {
           target.controller.insert('\n');
+          return true;
         }
-      case KeyType.ctrlD:
-        if (target.multiline) {
-          target.onSubmit?.call(target.controller.text);
-        }
+        return false;
       case KeyType.arrowLeft:
-        target.controller.moveCursor(-1);
+        return target.controller.moveCursor(-1);
       case KeyType.arrowRight:
-        target.controller.moveCursor(1);
+        return target.controller.moveCursor(1);
+      case KeyType.arrowUp:
+        if (target.multiline) {
+          return target.controller.moveCursorUp();
+        }
+        return false;
+      case KeyType.arrowDown:
+        if (target.multiline) {
+          return target.controller.moveCursorDown();
+        }
+        return false;
       default:
-        // Unhandled keys are dropped on the floor.
-        break;
+        return false;
     }
   }
 }

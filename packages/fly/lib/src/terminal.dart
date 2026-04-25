@@ -54,6 +54,9 @@ class Terminal {
     stdout.write('\x1B[?1049h'); // enter alt buffer
     stdout.write('\x1B[?7l'); // disable auto-wrap
     stdout.write('\x1B[2J\x1B[H'); // clear + home
+    // Enable SGR-extended mouse reporting so scroll-wheel events
+    // reach the app. Disabled again in exitAlternateScreen().
+    stdout.write('\x1B[?1000h\x1B[?1002h\x1B[?1006h');
     // DECSCUSR 6 = steady bar ("|"). We intentionally pick the
     // *steady* variant because the runtime blinks in software (see
     // runApp). Some terminals ignore DECSCUSR's blinking flag (e.g.
@@ -66,6 +69,7 @@ class Terminal {
   void exitAlternateScreen() {
     if (!_altScreen) return;
     stdout.write('\x1B[0 q'); // restore the user's default cursor style
+    stdout.write('\x1B[?1006l\x1B[?1002l\x1B[?1000l'); // disable mouse
     stdout.write('\x1B[?7h'); // re-enable auto-wrap
     stdout.write('\x1B[?1049l'); // leave alt buffer
     _altScreen = false;

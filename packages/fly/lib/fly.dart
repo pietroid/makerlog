@@ -37,6 +37,7 @@ export 'src/widgets/container.dart';
 export 'src/widgets/divider.dart';
 export 'src/widgets/ascii_image.dart';
 export 'src/widgets/keyboard_listener.dart';
+export 'src/widgets/list_view.dart';
 
 // Bloc integration lives in the sibling `fly_bloc` package so the
 // core framework stays agnostic of any particular state-management

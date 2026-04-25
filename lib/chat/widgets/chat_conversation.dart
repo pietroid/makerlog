@@ -1,4 +1,3 @@
-import 'package:app_ui/app_ui.dart';
 import 'package:fly/fly.dart';
 import 'package:fly_bloc/fly_bloc.dart';
 import 'package:makerlog/chat/cubit/chat_cubit.dart';
@@ -11,6 +10,10 @@ import 'package:makerlog/chat/repository/chat_message.dart';
 /// only [ChatState.typingRevealed] characters are shown until the
 /// reveal completes.
 class ChatConversation extends StatelessWidget {
+  final ScrollController? controller;
+
+  ChatConversation({this.controller});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChatCubit, ChatState>(
@@ -33,7 +36,7 @@ class ChatConversation extends StatelessWidget {
         }
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-          child: ListView(children: rows),
+          child: ListView(controller: controller, children: rows),
         );
       },
     );

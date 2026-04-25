@@ -1,4 +1,3 @@
-import 'package:app_ui/app_ui.dart';
 import 'package:fly/fly.dart';
 import 'package:fly_bloc/fly_bloc.dart';
 import 'package:makerlog/worklog/cubit/worklog_cubit.dart';
@@ -24,6 +23,7 @@ class _WorklogPageView extends StatefulWidget {
 
 class _WorklogPageViewState extends State<_WorklogPageView> {
   final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +48,7 @@ class _WorklogPageViewState extends State<_WorklogPageView> {
               }
 
               return ListView(
+                controller: _scrollController,
                 children: state.entries.map((entry) {
                   return _WorklogEntryRow(entry: entry);
                 }).toList(),
@@ -65,9 +66,10 @@ class _WorklogPageViewState extends State<_WorklogPageView> {
                   controller: _controller,
                   placeholder:
                       'what are you working on? (Opt+Enter for newline)',
-                  onSubmit: (text) {
-                    cubit.submit(text);
+                  onSubmit: (text) async {
+                    await cubit.submit(text);
                     _controller.clear();
+                    _scrollController.scrollToBottom();
                   },
                   style: const TextStyle(color: Color.brightWhite),
                   placeholderStyle: const TextStyle(color: Color.brightBlack),

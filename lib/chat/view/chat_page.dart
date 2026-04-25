@@ -46,6 +46,7 @@ class _ChatPageView extends StatefulWidget {
 
 class _ChatPageViewState extends State<_ChatPageView> {
   final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   OllamaSetupStatus? _lastSetupStatus;
   BotStatus? _lastBotStatus;
@@ -58,7 +59,7 @@ class _ChatPageViewState extends State<_ChatPageView> {
     return Column(
       children: [
         Header(),
-        Expanded(child: ChatConversation()),
+        Expanded(child: ChatConversation(controller: _scrollController)),
         BlocListener<OllamaSetupCubit, OllamaSetupState>(
           listenWhen: (previous, current) =>
               previous.status != current.status ||
