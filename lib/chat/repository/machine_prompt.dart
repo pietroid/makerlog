@@ -12,10 +12,16 @@ class MachinePrompt {
   /// An optional hint to show to the user when the prompt accepts freeform input.
   final String? freeFormHint;
 
+  /// When true, the human's reply is forwarded to the bot instead of
+  /// advancing to the next scripted prompt; the bot's answer is
+  /// streamed into the chat log, then the flow advances.
+  final bool forwardToBot;
+
   MachinePrompt({
     required this.key,
     required this.prompt,
     required this.options,
     this.freeFormHint,
+    this.forwardToBot = false,
   });
 }

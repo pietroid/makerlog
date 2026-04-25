@@ -1,10 +1,14 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:fly/fly.dart';
 import 'package:fly_bloc/fly_bloc.dart';
+import 'package:makerlog/bot/cubit/bot_cubit.dart';
+import 'package:makerlog/bot/repository/bot_repository.dart';
 import 'package:makerlog/chat/cubit/chat_cubit.dart';
 import 'package:makerlog/chat/cubit/chat_state.dart';
 import 'package:makerlog/chat/repository/chat_repository.dart';
 import 'package:makerlog/chat/widgets/chat_conversation.dart';
+import 'package:makerlog/ollama_setup/cubit/ollama_setup_cubit.dart';
+import 'package:makerlog/ollama_setup/repository/ollama_setup_repository.dart';
 import 'package:makerlog/widgets/header.dart';
 import 'package:makerlog/widgets/input_bar.dart';
 
@@ -15,9 +19,25 @@ import 'package:makerlog/widgets/input_bar.dart';
 class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final repository = ChatRepository();
+    return BlocProvider<OllamaSetupCubit>(
+      create: (_) => OllamaSetupCubit(repository: OllamaSetupRepository()),
+      child: BlocProvider<BotCubit>(
+        create: (_) => BotCubit(repository: BotRepository()),
+        child: _ChatCubitScope(),
+      ),
+    );
+  }
+}
+
+class _ChatCubitScope extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return BlocProvider<ChatCubit>(
-      create: (_) => ChatCubit(repository: repository),
+      create: (ctx) => ChatCubit(
+        repository: ChatRepository(),
+        ollamaSetupCubit: ctx.read<OllamaSetupCubit>(),
+        botCubit: ctx.read<BotCubit>(),
+      ),
       child: _ChatPageView(),
     );
   }
@@ -57,8 +77,7 @@ class _ChatPageViewState extends State<_ChatPageView> {
         ),
         BlocBuilder<ChatCubit, ChatState>(
           builder: (context, state) {
-            final prompts =
-                context.read<ChatCubit>().repository.initialPrompts();
+            final prompts = context.read<ChatCubit>().repository.setupPrompts();
             final hint = state.currentPromptIndex < prompts.length
                 ? prompts[state.currentPromptIndex].freeFormHint
                 : null;

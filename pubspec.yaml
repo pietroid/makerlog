@@ -4,7 +4,7 @@ version: 0.2.0
 publish_to: none
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.9.0
 
 dependencies:
   # The framework lives in-tree as a path package so edits there
@@ -16,6 +16,7 @@ dependencies:
   app_ui:
     path: packages/app_ui
   equatable: ^2.0.8
+  ollama_dart: ^2.1.0
 
 dev_dependencies:
   lints: ^3.0.0
