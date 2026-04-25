@@ -10,12 +10,7 @@ class Header extends StatelessWidget {
       border: Border(style: LineStyle.thin, color: Color.rgb(0, 150, 100)),
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.only(
-          left: 1,
-          top: 0,
-          bottom: 0,
-          right: 1,
-        ),
+        padding: const EdgeInsets.only(left: 1, top: 0, bottom: 0, right: 1),
         child: Text(
           'makerlog',
           style: TextStyle(

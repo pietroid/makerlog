@@ -56,31 +56,23 @@ class _WorklogPageViewState extends State<_WorklogPageView> {
           ),
         ),
         Container(
-          color: Color.black,
-          height: 1,
+          border: Border(style: LineStyle.thin, color: Color.rgb(0, 150, 100)),
           padding: const EdgeInsets.symmetric(horizontal: 1),
           child: Row(
             children: [
-              Text(
-                '❯ ',
-                style: const TextStyle(
-                  color: Color.brightCyan,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               Expanded(
                 child: TextField(
                   controller: _controller,
-                  placeholder: 'what are you working on?',
+                  placeholder:
+                      'what are you working on? (Opt+Enter for newline)',
                   onSubmit: (text) {
                     cubit.submit(text);
                     _controller.clear();
                   },
                   style: const TextStyle(color: Color.brightWhite),
-                  placeholderStyle: const TextStyle(
-                    color: Color.brightBlack,
-                    fontStyle: FontStyle.italic,
-                  ),
+                  placeholderStyle: const TextStyle(color: Color.brightBlack),
+                  maxLines: null,
+                  multiline: true,
                 ),
               ),
             ],
@@ -99,8 +91,7 @@ class _WorklogEntryRow extends StatelessWidget {
   String _formatTime(DateTime dt) {
     final h = dt.hour.toString().padLeft(2, '0');
     final m = dt.minute.toString().padLeft(2, '0');
-    final s = dt.second.toString().padLeft(2, '0');
-    return '$h:$m:$s';
+    return '$h:$m';
   }
 
   @override
@@ -115,10 +106,7 @@ class _WorklogEntryRow extends StatelessWidget {
             style: TextStyle(color: Color.brightBlack),
           ),
           Expanded(
-            child: Text(
-              entry.text,
-              style: TextStyle(color: Color.brightWhite),
-            ),
+            child: Text(entry.text, style: TextStyle(color: Color.brightWhite)),
           ),
         ],
       ),

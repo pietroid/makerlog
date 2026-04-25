@@ -15,11 +15,7 @@ class InputBar extends StatelessWidget {
 
   final String? placeholder;
 
-  InputBar({
-    required this.bloc,
-    required this.controller,
-    this.placeholder,
-  });
+  InputBar({required this.bloc, required this.controller, this.placeholder});
 
   @override
   Widget build(BuildContext context) {

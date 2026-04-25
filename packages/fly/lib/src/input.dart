@@ -6,10 +6,12 @@ import 'text_editing_controller.dart';
 enum KeyType {
   character,
   enter,
+  altEnter,
   backspace,
   tab,
   escape,
   ctrlC,
+  ctrlD,
   arrowUp,
   arrowDown,
   arrowLeft,
@@ -46,6 +48,9 @@ class KeyParser {
       if (b == 3) {
         events.add(const KeyEvent(KeyType.ctrlC));
         i++;
+      } else if (b == 4) {
+        events.add(const KeyEvent(KeyType.ctrlD));
+        i++;
       } else if (b == 13 || b == 10) {
         events.add(const KeyEvent(KeyType.enter));
         i++;
@@ -56,25 +61,34 @@ class KeyParser {
         events.add(const KeyEvent(KeyType.tab));
         i++;
       } else if (b == 27) {
-        // ESC: may be a CSI sequence (ESC [ X) or a lone Escape press.
-        if (i + 2 < bytes.length && bytes[i + 1] == 91) {
-          switch (bytes[i + 2]) {
-            case 65:
-              events.add(const KeyEvent(KeyType.arrowUp));
-            case 66:
-              events.add(const KeyEvent(KeyType.arrowDown));
-            case 67:
-              events.add(const KeyEvent(KeyType.arrowRight));
-            case 68:
-              events.add(const KeyEvent(KeyType.arrowLeft));
-            default:
-              events.add(const KeyEvent(KeyType.other));
+        // ESC: may be a CSI sequence (ESC [ X), an Alt-modified key,
+        // or a lone Escape press.
+        if (i + 1 < bytes.length && bytes[i + 1] == 91) {
+          // ESC [ = CSI sequence (arrow keys, etc.)
+          if (i + 2 < bytes.length) {
+            switch (bytes[i + 2]) {
+              case 65:
+                events.add(const KeyEvent(KeyType.arrowUp));
+              case 66:
+                events.add(const KeyEvent(KeyType.arrowDown));
+              case 67:
+                events.add(const KeyEvent(KeyType.arrowRight));
+              case 68:
+                events.add(const KeyEvent(KeyType.arrowLeft));
+              default:
+                events.add(const KeyEvent(KeyType.other));
+            }
+            i += 3;
+            continue;
           }
-          i += 3;
-        } else {
-          events.add(const KeyEvent(KeyType.escape));
-          i++;
+        } else if (i + 1 < bytes.length && (bytes[i + 1] == 13 || bytes[i + 1] == 10)) {
+          // Alt+Enter (ESC followed by CR or LF)
+          events.add(const KeyEvent(KeyType.altEnter));
+          i += 2;
+          continue;
         }
+        events.add(const KeyEvent(KeyType.escape));
+        i++;
       } else if (b >= 32 && b < 127) {
         events.add(KeyEvent(KeyType.character, String.fromCharCode(b)));
         i++;
@@ -113,8 +127,9 @@ class KeyParser {
 class _FocusTarget {
   final TextEditingController controller;
   final void Function(String text)? onSubmit;
+  final bool multiline;
 
-  _FocusTarget(this.controller, this.onSubmit);
+  _FocusTarget(this.controller, this.onSubmit, {this.multiline = false});
 }
 
 /// Tiny global focus manager. Intentionally simple: there is at most
@@ -143,8 +158,9 @@ class FocusManager {
   static void request(
     TextEditingController controller, {
     void Function(String text)? onSubmit,
+    bool multiline = false,
   }) {
-    _target = _FocusTarget(controller, onSubmit);
+    _target = _FocusTarget(controller, onSubmit, multiline: multiline);
   }
 
   /// Register a raw key callback for this frame. Re-requested every
@@ -176,6 +192,14 @@ class FocusManager {
         target.controller.backspace();
       case KeyType.enter:
         target.onSubmit?.call(target.controller.text);
+      case KeyType.altEnter:
+        if (target.multiline) {
+          target.controller.insert('\n');
+        }
+      case KeyType.ctrlD:
+        if (target.multiline) {
+          target.onSubmit?.call(target.controller.text);
+        }
       case KeyType.arrowLeft:
         target.controller.moveCursor(-1);
       case KeyType.arrowRight:
