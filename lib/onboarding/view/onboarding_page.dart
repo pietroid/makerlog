@@ -6,7 +6,7 @@ class OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return KeyboardListener(
       onKeyEvent: (event) {
-        context.read<AppCubit>().startMainApp();
+        context.read<AppCubit>().startWorklog();
       },
       child: Container(
         color: Color.black,
@@ -20,9 +20,7 @@ class OnboardingPage extends StatelessWidget {
               ),
               Text(
                 'Welcome to Makerlog! Press any key to start our journey...',
-                style: TextStyle(
-                  color: Color.rgb(120, 230, 160),
-                ),
+                style: TextStyle(color: Color.rgb(120, 230, 160)),
               ),
             ],
           ),

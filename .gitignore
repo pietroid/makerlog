@@ -1,0 +1,30 @@
+archive/
+
+# See https://dart.dev/guides/libraries/private-files
+
+# Files and directories created by pub
+.dart_tool/
+.packages
+build/
+# If you are building an application, you may want to check-in your pubspec.lock
+pubspec.lock
+
+# Directory created by dartdoc
+doc/api/
+
+# Avoid committing generated Dart files:
+*.g.dart
+*.freezed.dart
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Test related
+coverage/
+
+# OS
+.DS_Store

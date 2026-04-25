@@ -3,6 +3,7 @@ import 'package:fly_bloc/fly_bloc.dart';
 import 'package:makerlog/app/bloc/app_state.dart';
 import 'package:makerlog/chat/view/chat_page.dart';
 import 'package:makerlog/onboarding/view/onboarding_page.dart';
+import 'package:makerlog/worklog/view/worklog_page.dart';
 
 import 'bloc/app_cubit.dart';
 
@@ -28,6 +29,8 @@ class _MakerbookAppView extends StatelessWidget {
       switch (state.userJourneyStage) {
         case UserJourneyStage.onboarding:
           return OnboardingPage();
+        case UserJourneyStage.worklog:
+          return WorklogPage();
         case UserJourneyStage.mainApp:
           return ChatPage();
       }

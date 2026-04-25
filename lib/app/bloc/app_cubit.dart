@@ -9,6 +9,10 @@ class AppCubit extends Cubit<AppState> {
           ),
         );
 
+  void startWorklog() {
+    emit(AppState(userJourneyStage: UserJourneyStage.worklog));
+  }
+
   void startMainApp() {
     emit(AppState(userJourneyStage: UserJourneyStage.mainApp));
   }
