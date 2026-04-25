@@ -7,5 +7,6 @@
 library fly_bloc;
 
 export 'package:bloc/bloc.dart';
-export 'src/bloc_provider.dart';
 export 'src/bloc_builder.dart';
+export 'src/bloc_listener.dart';
+export 'src/bloc_provider.dart';
