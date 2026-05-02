@@ -3,9 +3,8 @@ import 'package:makerlog/worklog/repository/worklog_entry.dart';
 
 /// Handles durable storage of the worklog as a Markdown file.
 ///
-/// The backing file is `.makerbook/worklog.md`. Every entry is a
-/// single Markdown bullet with an ISO timestamp. The file is kept
-/// in sync with the in-memory list: [append] writes immediately.
+/// The backing file is `.makerlog/worklog.md`. Every non-empty line is
+/// treated as one entry. The file is the single source of truth.
 class WorklogRepository {
   final CommonRepository _common;
 
@@ -26,10 +25,10 @@ class WorklogRepository {
         .toList();
   }
 
-  /// Persists [entry] to disk and returns it.
-  Future<WorklogEntry> append(WorklogEntry entry) async {
-    final line = '${entry.toMarkdown()}\n';
+  /// Persists [text] to disk as a new line and reloads the file.
+  Future<List<WorklogEntry>> append(String text) async {
+    final line = '${text.trim()}\n';
     await _common.appendFile(_filePath, line);
-    return entry;
+    return load();
   }
 }

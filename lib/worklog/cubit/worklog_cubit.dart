@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:fly_bloc/fly_bloc.dart';
 import 'package:makerlog/worklog/cubit/worklog_state.dart';
-import 'package:makerlog/worklog/repository/worklog_entry.dart';
 import 'package:makerlog/worklog/repository/worklog_repository.dart';
 
-/// Owns the worklog history: loads on startup, keeps the in-memory
-/// list in sync with `.makerbook/worklog.md`.
+/// Owns the worklog history: loads on startup and keeps the in-memory
+/// list in sync with `.makerlog/worklog.md`.
 class WorklogCubit extends Cubit<WorklogState> {
   final WorklogRepository repository;
 
@@ -19,17 +18,12 @@ class WorklogCubit extends Cubit<WorklogState> {
     emit(state.copyWith(entries: entries));
   }
 
-  /// Adds a new entry, writes it to disk, and updates the state.
+  /// Adds a new entry, writes it to disk, reloads the file, and updates state.
   Future<void> submit(String text) async {
     final trimmed = text.trim();
     if (trimmed.isEmpty) return;
 
-    final entry = WorklogEntry(
-      timestamp: DateTime.now(),
-      text: trimmed,
-    );
-
-    await repository.append(entry);
-    emit(state.copyWith(entries: [...state.entries, entry]));
+    final entries = await repository.append(trimmed);
+    emit(state.copyWith(entries: entries));
   }
 }

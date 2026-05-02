@@ -90,27 +90,13 @@ class _WorklogEntryRow extends StatelessWidget {
 
   _WorklogEntryRow({required this.entry});
 
-  String _formatTime(DateTime dt) {
-    final h = dt.hour.toString().padLeft(2, '0');
-    final m = dt.minute.toString().padLeft(2, '0');
-    return '$h:$m';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '[${_formatTime(entry.timestamp)}] ',
-            style: TextStyle(color: Color.brightBlack),
-          ),
-          Expanded(
-            child: Text(entry.text, style: TextStyle(color: Color.brightWhite)),
-          ),
-        ],
+      child: Text(
+        entry.text,
+        style: TextStyle(color: Color.brightWhite),
       ),
     );
   }
